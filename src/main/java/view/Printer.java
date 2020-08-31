@@ -17,9 +17,12 @@ public class Printer{
         System.out.print(header);
     }
     public void printPinfallsScore(List<String> pinfalls, Map<Integer, Turn> turns) {
-        pinfalls.stream().forEach(System.out::print);
+        pinfalls.stream()
+                .forEach(System.out::print);
         System.out.print("\nScore\t\t");
-        turns.entrySet().stream().forEach(e-> System.out.print(e.getValue().getScore()+"\t\t"));
+        turns.entrySet()
+                .stream()
+                .forEach(e-> System.out.print(e.getValue().getScore()+"\t\t"));
     }
 
     public void printNamePlayerAndPinfalls(String namePlayer) {

@@ -12,8 +12,23 @@ public class Turn {
     private Integer pinfall3;
     private Integer score;
 
+    public Turn(){}
+
     public Turn(int pinfall1){
         this.pinfall1 = pinfall1;
+    }
+
+    public Turn(Integer pinfall1, Integer pinfall2, Integer pinfall3) {
+        this.pinfall1 = pinfall1;
+        this.pinfall2 = pinfall2;
+        this.pinfall3 = pinfall3;
+    }
+
+    public Turn(Integer pinfall1, Integer pinfall2, Integer pinfall3, Integer score) {
+        this.pinfall1 = pinfall1;
+        this.pinfall2 = pinfall2;
+        this.pinfall3 = pinfall3;
+        this.score = score;
     }
 
     public Integer getPinfall1() {

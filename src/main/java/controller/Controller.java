@@ -7,10 +7,7 @@ import model.Player;
 import model.Turn;
 import view.Printer;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 public class Controller {
@@ -22,6 +19,19 @@ public class Controller {
         readFileSaveInfo(game);
         printer.printHeader();
         processPinfallsScore(game.getPlayers());
+    }
+
+    public String setAndGetInputFile(String inputFile) throws IOException {
+        //Ask for the input file directory and the file name
+        if(inputFile.equals("")){
+            BufferedReader bufferDir = new BufferedReader(new InputStreamReader(System.in));
+            System.out.println("Enter the path of the input file (sample: D:\\bowlingGame.txt):");
+            inputFile = bufferDir.readLine();
+            if (inputFile.equals("")){
+                inputFile = "src/main/resources/bowlingGame.txt";
+            }
+        }
+        return inputFile;
     }
 
     public void readFileSaveInfo(Game game){
@@ -36,13 +46,8 @@ public class Controller {
         int flagSinglePlayer = 0;
 
         try{
-            //Ask for the input file directory and the file name
-            BufferedReader bufferDir = new BufferedReader(new InputStreamReader(System.in));
-            System.out.println("Enter the path of the input file (sample: D:\\proof.txt):");
-            String fileInput = "D:\\bowlingGame0.txt"; //bufferDir.readLine();
-
             //input file, the reader file and the buffer which save the lines
-            file = new File(fileInput);
+            file = new File(setAndGetInputFile(""));
             reader = new FileReader(file);
             BufferedReader buffer = new BufferedReader(reader);
 
@@ -65,19 +70,8 @@ public class Controller {
                 if(pinfall.equals("F")){
                     pinfall = "0";
                 }
-
-                int pinfallNumber;
-                try {
-                    pinfallNumber = Integer.parseInt(pinfall);
-                }catch(NumberFormatException e){
-                    throw new PinfallException("The valid values to report the pinfalls in a throw are 0 to 10 or F");
-                }
-
-                if (pinfallNumber > 10){
-                    throw new PinfallException("The number of pinfalls in a throw cannot be greater than 10");
-                }else if(pinfallNumber < 0){
-                    throw new PinfallException("The number of pinfalls in a throw cannot be less than 0");
-                }
+                //Validate the pinfall value
+                int pinfallNumber = validateDataFilePinfall(pinfall);
 
                 //Define if we changed the frame
                 if (!firstPlayer.equals(name)){
@@ -104,13 +98,7 @@ public class Controller {
                 }
 
                 //Validate if a player has more than 10 turns
-                if (frame == 11){
-                    try{
-                        throw new TurnException("A player can only have 10 turns");
-                    }catch(TurnException e){
-                        System.out.println("A player can only have 10 turns");
-                    }
-                }
+                validateDataFileNumberOfFrames(frame);
 
                 //Validates if a player already exist in the Map of players from the Game class
                 if (players.containsKey(name)){
@@ -219,5 +207,27 @@ public class Controller {
             }
             printer.printPinfallsScore(pinfalls, turns);
         }
+    }
+
+    public void validateDataFileNumberOfFrames(int frame) {
+        if (frame > 10){
+            throw new TurnException("A player can only have 10 turns");
+        }
+    }
+
+    public int validateDataFilePinfall(String pinfall) {
+        int pinfallNumber;
+        try {
+            pinfallNumber = Integer.parseInt(pinfall);
+        }catch(NumberFormatException e){
+            throw new PinfallException("The valid values to report the pinfalls in a throw are 0 to 10 or F");
+        }
+
+        if (pinfallNumber > 10){
+            throw new PinfallException("The number of pinfalls in a throw cannot be greater than 10");
+        }else if(pinfallNumber < 0){
+            throw new PinfallException("The number of pinfalls in a throw cannot be less than 0");
+        }
+        return pinfallNumber;
     }
 }
