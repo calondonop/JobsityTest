@@ -121,13 +121,12 @@ public class Controller {
                 }else{
                     //numberPlayers =
                     player = new Player(name, frame, new Turn(Integer.parseInt(pinfall)));
-                    turns = player.getTurns();//ojo al parecer no se necesita
+                    turns = player.getTurns();
                     players.put(name, player);
                 }
                 player.setTurns(turns);
                 game.setPlayers(players);
             }
-            players.entrySet().stream().forEach(e-> System.out.println(e.getValue().getTurns()));//ojo
         }catch(NumberFormatException nfe){//Se tiene esta excepción para validar cuando el contenido del archivo no sea numérico
             System.out.println("Revise el archivo, se encuentran datos que no son numéricos.");
         }catch(Exception e){//Se hace el manejo de cualquier excepción genérica que se pueda dar y el trace para su revisión
