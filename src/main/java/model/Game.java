@@ -25,8 +25,4 @@ public class Game {
     public void setPlayers(Map<String, Player> players) {
         this.players = players;
     }
-
-    public void addPlayer(String name, Player player){
-        this.players.put(name, player);
-    }
 }

@@ -13,14 +13,6 @@ public class Player {
         this.turns.put(frame, turn);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Map<Integer, Turn> getTurns() {
         return turns;
     }
