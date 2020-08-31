@@ -1,5 +1,7 @@
 package model;
 
+import exception.PinfallsFrameException;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
@@ -48,13 +50,20 @@ public class Turn {
 
     public Integer orElseOptional(Integer pinfall){
         Optional<Integer> optional = Optional.ofNullable(pinfall);
-        Integer pinfallOfNullable = optional.orElse(0);
-        return pinfallOfNullable;
+        return optional.orElse(0);
     }
 
+    public void validateFramePinfalls(int frame){
+        if(frame != 10){
+            if (this.getPinfall1() + orElseOptional(this.getPinfall2()) > 10){
+                throw new PinfallsFrameException("In a frame with two throws, " +
+                        "both throws cannot sum more than 10 pinfalls");
+            }
+        }
+    }
 
     public void calculateScores(Map<Integer, Turn> turns){
-        Integer score = 0;
+        int score = 0;
 
         Iterator tn = turns.keySet().iterator();
         while(tn.hasNext()){
@@ -65,8 +74,8 @@ public class Turn {
             Integer pinfall3 = orElseOptional(turn.getPinfall3());
 
             if(keyTurn != 10){
-                Integer scoreFrame = pinfall1 + pinfall2;
-                Integer flagBall = 0;
+                int scoreFrame = pinfall1 + pinfall2;
+                int flagBall = 0;
                 //score += scoreFrame;
                 if(scoreFrame < 10){
                     score += scoreFrame;
@@ -78,7 +87,7 @@ public class Turn {
                     if(keyTurn < 9){
                         nextPinfall4 = turns.get(keyTurn+2).getPinfall1();
                     }
-                    if(nextPinfall1 != null && flagBall < 2){
+                    if(nextPinfall1 != null){
                         score += nextPinfall1;
                         flagBall += 1;
                     }
@@ -92,17 +101,15 @@ public class Turn {
                     }
                     if (nextPinfall4 != null && flagBall < 2){
                         score += nextPinfall4;
-                        flagBall += 1;
                     }
                     score += scoreFrame;
                 }else if(scoreFrame == 10){
                     score += scoreFrame + turns.get(keyTurn+1).getPinfall1();
                 }
-                turn.setScore(score);
             }else{
                 score += pinfall1 + pinfall2 + pinfall3;
-                turn.setScore(score);
             }
+            turn.setScore(score);
         }
     }
 }
